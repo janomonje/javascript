@@ -142,7 +142,7 @@ btnLogin.addEventListener('click', function (event) {
   );
   //console.log(currentAccount);
   // optional chaining
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +(inputLoginPin.value)) {
     // Display UI and Welcome message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -163,7 +163,7 @@ btnClose.addEventListener('click', function (event) {
 
   if (
     inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === Number(currentAccount.pin)
+    +(inputClosePin.value) === +(currentAccount.pin)
   ) {
     const index = accounts.findIndex(
       account => account.username === currentAccount.username
@@ -181,7 +181,7 @@ btnClose.addEventListener('click', function (event) {
 
 btnTransfer.addEventListener('click', function (event) {
   event.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +(inputTransferAmount.value);
   const receiverAccount = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -205,7 +205,7 @@ btnTransfer.addEventListener('click', function (event) {
 btnLoan.addEventListener('click', function (event) {
   event.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount / 10)) {
     // Add the movement
     currentAccount.movements.push(amount);
@@ -225,10 +225,10 @@ btnSort.addEventListener('click', function (event) {
   sorted = !sorted;
 });
 
-// I have calculated the number of transaction per account
+// I have calculated the + of transaction per account
 const countingTransactions = accs => {
   accs.forEach(function (acc) {
-    acc.numberOfTransaction = acc.movements.length;
+    acc.+OfTransaction = acc.movements.length;
   });
 };
 countingTransactions(accounts);
@@ -242,7 +242,7 @@ const bankDepositSum = accounts
   .reduce((acc, mov) => acc + mov, 0);
 console.log(bankDepositSum);
 
-// 2. Number of deposits bigger or equal to 1000
+// 2. + of deposits bigger or equal to 1000
 
 const numDeposit1000 = accounts
   .flatMap(acc => acc.movements)
