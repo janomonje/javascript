@@ -246,6 +246,101 @@ const imgObserver = new IntersectionObserver(loadImage, {
 
 imageTarget.forEach(image => imgObserver.observe(image));
 
+////////////////////////////////////////////////////////////////////////////////////
+
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
+
+  let currentSlide = 0;
+  const maxSlide = slides.length;
+
+  // Functions
+
+  const createDots = () => {
+    slides.forEach((_, index) =>
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${index}"></button>`
+      )
+    );
+  };
+
+  // deactivating dots first
+  const activeDots = slide => {
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    // activating based on the data-slide attribute.
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  // Slider
+
+  const goToslide = slide => {
+    slides.forEach((s, i) => {
+      s.style.transform = `translateX(${100 * (i - slide)}%)`;
+    });
+  };
+
+  // Next Slide
+  const nextSlide = () => {
+    if (currentSlide === maxSlide - 1) {
+      currentSlide = 0;
+    } else {
+      currentSlide++;
+    }
+    goToslide(currentSlide);
+    activeDots(currentSlide);
+  };
+
+  const previousSlide = () => {
+    if (currentSlide === 0) {
+      currentSlide = maxSlide - 1;
+    } else {
+      currentSlide--;
+    }
+    goToslide(currentSlide);
+    activeDots(currentSlide);
+  };
+
+  // initialization functions
+  const init = function () {
+    goToslide(0);
+    createDots();
+    activeDots(0); // So when page is loaded for the first time the first dot is activated!
+  };
+
+  init();
+  // Event handlers
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', previousSlide);
+
+  document.addEventListener('keydown', event => {
+    console.log(event);
+    if (event.key === 'ArrowLeft') previousSlide();
+    event.key === 'ArrowRight' && nextSlide(); // same with short circuit!
+  });
+
+  // syncronizing dots
+
+  dotContainer.addEventListener('click', event => {
+    if (event.target.classList.contains('dots__dot')) {
+      const { slide } = event.target.dataset; // de-structuring;
+      goToslide(slide);
+      console.log(slide);
+      activeDots(slide);
+    }
+  });
+};
+
+slider();
+
 ////////////////////////
 ////////////////////////
 ////////////////////////
@@ -449,4 +544,21 @@ console.log(h1.parentElement.children);
 [...h1.parentElement.children].forEach(element => {
   if(element !== h1) element.style.transform='scale(0.5)'
 })
+
+
+// Lifecycle of the DOM
+
+document.addEventListener('DOMContentLoaded', event => {
+  console.log('HTML parsed and DOM tree built!', event);
+});
+
+window.addEventListener('load', event => {
+  console.log('Page fully loaded', event);
+});
+
+window.addEventListener('beforeunload', event => {
+  event.preventDefault();
+  console.log(event);
+  event.returnValue = '';
+});
 */
